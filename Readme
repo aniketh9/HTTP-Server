@@ -1,0 +1,82 @@
+
+Project contains below files and directories :
+1.BasicHttpServer.java 
+2.HttpRequestProcessor.java
+3.Utility.java
+4.makefile
+5.MANIFEST.MF
+6.createexecutable.sh 
+
+Directory:
+www : Contains resource files that are requested by clients.
+
+Description of project:
+
+The project implements a simple HTTP server that serves client GET requests with HTTP response ,below are the java files that are responsible for the implementation:
+
+1.BasicHttpServer.java : 
+>It is the main class of the server , which  starts the server by binding and listening on an unused port (Uses java.net.ServerSocket class)
+>Once client sends a GET requests ,it creates and starts a new thread of HttpRequestProcessor.
+
+2.HttpRequestProcessor.java:
+> Implements Runnable interface.
+> Gets client socket connection from the main class.
+> Reads the client request and searches for the requested resource file under "www" directory and generates the response based on the availability.(Uses java.net.Socket class for IO)
+
+3.Utility.java :
+> Its a utility class used by "HttpRequestProcessor.java" for util methods like getContentType(fileName).
+
+About other files :
+4.makefile - Compiles the above java classes, creates a runnable jar that is used by "createexecutable.sh" script to create an executable named "server"
+
+5.MANIFEST.MF : Used for runnable jar creation . define the main class i.e. "BasicHttpServer.java"
+
+6.createexecutable.sh: Used inside makefile target to create server executable.
+
+How to run:
+
+step 1:  Extract amalles1-project0.tar.gz and go to directory amalles1-project0
+step 2:  make
+step 3:  ./server
+
+After step 3 the server starts and prints below details(sample):
+
+>amalles1@remote02:~/amalles1-project0$ ./server
+>Server is listening at port number: 56807 and hosted on : remote02.cs.binghamton.edu
+
+Test commands and their sample output:
+
+Command template: wget http://[REPLACE WITH HOSTNAME]:[REPLACE WITH PORTNUMBER]/www/[REPLACE WITH DESIRED FILE NAME] -S
+
+SAMPLE EXAMPLE :
+
+amalles1@remote04:~$ wget http://remote02.cs.binghamton.edu:56807/www/skype-ubuntu-precise_4.3.0.37-1_i386.deb -S
+--2016-09-08 14:37:30--  http://remote02.cs.binghamton.edu:56807/www/skype-ubuntu-precise_4.3.0.37-1_i386.deb
+Resolving remote02.cs.binghamton.edu (remote02.cs.binghamton.edu)... 128.226.180.164
+Connecting to remote02.cs.binghamton.edu (remote02.cs.binghamton.edu)|128.226.180.164|:56807... connected.
+HTTP request sent, awaiting response...
+  HTTP/1.0 200 OK
+  Date: Thu, 8 Sep 2016 18:37:31 GMT
+  Server: BasicHTTPServer/0.1
+  Content-Type: application/x-debian-package
+  Last-Modified: Thu, 08 Sep 2016 15:44:10 GMT
+  Content-Length: 20112698
+Length: 20112698 (19M) [application/x-debian-package]
+Saving to: `skype-ubuntu-precise_4.3.0.37-1_i386.deb'
+
+100%[==============================================================================================================================>] 20,112,698  58.7M/s   in 0.3s
+
+2016-09-08 14:37:31 (58.7 MB/s) - `skype-ubuntu-precise_4.3.0.37-1_i386.deb' saved [20112698/20112698]
+
+FILE NOT FOUND EXAMPLE :
+
+amalles1@remote03:~$ wgeamalles1@remote03:~$ wget http://remote01.cs.binghamton.edu:45569 -S
+--2016-09-08 17:01:51--  http://remote01.cs.binghamton.edu:45569/
+Resolving remote01.cs.binghamton.edu (remote01.cs.binghamton.edu)... 128.226.180.163
+Connecting to remote01.cs.binghamton.edu (remote01.cs.binghamton.edu)|128.226.180.163|:45569... connected.
+HTTP request sent, awaiting response...
+  HTTP/1.0 404 Not Found
+  Date: Thu, 8 Sep 2016 21:01:52 GMT
+  Server: BasicHTTPServer/0.1
+  Content-Type: text/html
+2016-09-08 17:01:52 ERROR 404: Not Found.
